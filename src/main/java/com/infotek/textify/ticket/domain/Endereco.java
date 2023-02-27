@@ -15,7 +15,7 @@ import javax.persistence.Entity;
 public class Endereco {
     private String cep;
 
-    private int numero;
+    private String numero;
 
     private String rua;
 

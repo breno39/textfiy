@@ -17,6 +17,6 @@ public class ContatoTelefonico {
     private String numero;
 
     public String getFullNumber() {
-        return ddd + numero;
+        return ddd.concat(numero);
     }
 }

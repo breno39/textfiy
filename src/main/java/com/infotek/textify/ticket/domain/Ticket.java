@@ -1,7 +1,7 @@
 package com.infotek.textify.ticket.domain;
 
 import com.infotek.textify.cliente.domain.Cliente;
-import com.infotek.textify.credenciado.domain.Atendente;
+import com.infotek.textify.atendente.domain.Atendente;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -34,12 +34,14 @@ public class Ticket {
     @Embedded
     private Endereco endereco;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "credenciado_id")
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY, cascade={CascadeType.MERGE})
+    @JoinColumn(name = "atendente_id")
     private Atendente atendente;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cliente_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade= {CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
     @CreationTimestamp

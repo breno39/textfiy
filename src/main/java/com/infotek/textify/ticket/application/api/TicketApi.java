@@ -1,5 +1,7 @@
 package com.infotek.textify.ticket.application.api;
 
+import com.infotek.textify.ticket.application.api.dto.TicketDto;
+import com.infotek.textify.ticket.application.api.dto.TicketForm;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,6 @@ public interface TicketApi {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    ResponseEntity<Object> createTicket(@RequestBody @Valid Object ticketForm,
-                                   UriComponentsBuilder uriBuilder);
+    ResponseEntity<TicketDto> createTicket(@RequestBody @Valid TicketForm ticketForm,
+                                           UriComponentsBuilder uriBuilder);
 }
