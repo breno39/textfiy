@@ -17,6 +17,13 @@ repositories {
 	mavenCentral()
 }
 
+bootJar {
+	archiveFileName = "springBoot.jar"
+}
+
+ext.dockerOwner = project.hasProperty('dockerOwner') ? project.getProperty('dockerOwner'):'Infotek'
+ext.dockerVersion = project.hasProperty('dockerVersion') ? project.getProperty('dockerVersion'):'1.0.0'
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -39,4 +46,26 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+task copyDockerfile(type: Copy) {
+	from 'docker/Dockerfile'
+	into 'build/libs'
+}
+
+ext.ownerProject = "${dockerOwner}/${project.name}"
+task docker(type: Exec) {
+	group "OCI"
+	dependsOn bootJar
+	dependsOn copyDockerfile
+	workingDir "${buildDir}/libs"
+	commandLine "docker", "build", "-f", "Dockerfile", "-t", "${ownerProject}:${dockerVersion}", "-t", "${ownerProject}:latest", "."
+}
+
+task buildah(type: Exec) {
+	group "OCI"
+	dependsOn bootJar
+	dependsOn copyDockerfile
+	workingDir "${buildDir}/libs"
+	commandLine "buildah", "bud", "-f", "Dockerfile", "-t", "${ownerProject}:latest", "-t", "docker.io/${ownerProject}:latest","-t", "docker.io/${ownerProject}:${dockerVersion}","-t","ghcr.io/${ownerProject}:latest","-t","ghcr.io/${ownerProject}:${dockerVersion}", "."
 }
