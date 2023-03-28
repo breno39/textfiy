@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 public class ClienteForm implements Serializable {
@@ -25,6 +27,9 @@ public class ClienteForm implements Serializable {
     @NotNull
     private LocalDateTime birthdayDate;
 
+    @NotNull
+    private Set<DocumentoForm> documentosForm;
+
     public Cliente toEntity() {
         return Cliente.builder()
                 .nome(nome)
@@ -33,6 +38,7 @@ public class ClienteForm implements Serializable {
                 .email(email)
                 .telefone(telefone.toEntity())
                 .birthdayDate(birthdayDate)
+                .documentos(documentosForm.stream().map(DocumentoForm::toEntity).collect(Collectors.toSet()))
                 .build();
     }
 }

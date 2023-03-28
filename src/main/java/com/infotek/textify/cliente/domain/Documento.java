@@ -1,6 +1,5 @@
 package com.infotek.textify.cliente.domain;
 
-import com.infotek.textify.ticket.domain.Ticket;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -8,18 +7,15 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Builder
 @Entity
 @Getter
-@Table(name = "cliente")
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Cliente {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Documento {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
@@ -27,24 +23,10 @@ public class Cliente {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    private String nome;
+    private DocumentType type;
 
-    private String rg;
-
-    private String cpf;
-
-    private String email;
-
-    @Embedded
-    private ContatoTelefonico telefone;
-
-    private LocalDateTime birthdayDate;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
-    private Set<Ticket> tickets;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Documento> documentos;
+    @Lob
+    private byte[] content;
 
     @CreationTimestamp
     private OffsetDateTime createdAt;
